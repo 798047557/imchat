@@ -8,7 +8,6 @@ import (
 	"github/yl/imchat/service"
 	"net/http"
 	"strconv"
-	"text/template"
 )
 
 type ConnUser struct{
@@ -35,7 +34,8 @@ func main() {
 
 	router := gin.Default()
 
-	router.GET("/register",register)
+	router.POST("/register",register)
+	//router.POST("/hello",hello)
 	//http.HandleFunc("/register",register)
 
 
@@ -49,10 +49,16 @@ func main() {
 	router.Run(":8000")
 }
 
+//func hello(context *gin.Context){
+//	fmt.Println("hello gin")
+//}
+
 func register(context *gin.Context) {
-	mobile,err := strconv.ParseInt(context.Param("mobile"),10,64)
+
+	mobile,err := strconv.ParseInt(context.PostForm("mobile"),10,64)
+
 	if err != nil{
-		panic("手机号码参数错误")
+		panic(err)
 	}
 	password := context.Param("password")
 	service.Register(mobile,password,"nickname","avatar",1)
@@ -64,23 +70,23 @@ func register(context *gin.Context) {
 }
 
 
-func view(){
-	view,err := template.ParseGlob("../view/**/*") // ** 目录 *文件
-	if err != nil{
-		panic(err)
-	}
-
-	for _,v := range view.Templates(){
-		viewName := v.Name()
-		fmt.Println(viewName)
-		http.HandleFunc(viewName, func(writer http.ResponseWriter, request *http.Request) {
-			err = view.ExecuteTemplate(writer,viewName,nil)
-			if err != nil{
-				panic(err)
-			}
-		})
-	}
-}
+//func view(){
+//	view,err := template.ParseGlob("../view/**/*") // ** 目录 *文件
+//	if err != nil{
+//		panic(err)
+//	}
+//
+//	for _,v := range view.Templates(){
+//		viewName := v.Name()
+//		fmt.Println(viewName)
+//		http.HandleFunc(viewName, func(writer http.ResponseWriter, request *http.Request) {
+//			err = view.ExecuteTemplate(writer,viewName,nil)
+//			if err != nil{
+//				panic(err)
+//			}
+//		})
+//	}
+//}
 
 
 

@@ -1,4 +1,5 @@
 package model
+
 type User struct{
 	Id int64 `xorm:" autoincr int(10)" json:"id"`
 	Token string `xorm:" varchar(40)" json:"token"`
@@ -20,7 +21,8 @@ func (u *User) CreateInfo() (int64,error){
 func (u *User) FindInfoByMobile(mobile int64){
 	_,err := db.Where("mobile = ? ",mobile).Get(u)
 	if err != nil{
-		panic(u)
+		//log.Fatalln("查询报错")
+		panic(err.Error())
 	}
 }
 

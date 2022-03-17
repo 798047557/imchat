@@ -20,7 +20,7 @@ const(
 var db *xorm.Engine
 
 func init() () {
-	db,err := xorm.NewEngine("mysql",user+":"+password+"@"+"("+host+":"+port+")/"+dbname+"/charset=utf8")
+	db,err := xorm.NewEngine("mysql",user+":"+password+"@("+host+":"+port+")/"+dbname+"?charset=utf8")
 	if err != nil {
 		panic(err)
 	}
