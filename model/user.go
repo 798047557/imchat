@@ -1,5 +1,6 @@
 package model
 
+
 type User struct{
 	Id int64 `xorm:" autoincr int(10)" json:"id"`
 	Token string `xorm:" varchar(40)" json:"token"`
@@ -9,7 +10,7 @@ type User struct{
 	Mobile int64 `xorm:" bigint(20)" json:"mobile"`
 	Password string `xorm:" varchar(20)" json:"password"`
 	Online string `xorm:" tinyint(1)" json:"online"`
-	CreatedTime int64 `xorm:" bigint(20)" json:"created_time"`
+	CreateTime int64 `xorm:" bigint(20)" json:"create_time"`
 }
 
 
@@ -19,7 +20,10 @@ func (u *User) CreateInfo() (int64,error){
 }
 
 func (u *User) FindInfoByMobile(mobile int64){
+
+	//fmt.Println(u)
 	_,err := db.Where("mobile = ? ",mobile).Get(u)
+	////fmt.Println(u,bool,error)
 	if err != nil{
 		//log.Fatalln("查询报错")
 		panic(err.Error())

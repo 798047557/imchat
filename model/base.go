@@ -5,8 +5,6 @@ import (
 	"encoding/hex"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/go-xorm/xorm"
-
-	//"github.com/jinzhu/gorm"
 )
 
 const(
@@ -20,7 +18,8 @@ const(
 var db *xorm.Engine
 
 func init() () {
-	db,err := xorm.NewEngine("mysql",user+":"+password+"@("+host+":"+port+")/"+dbname+"?charset=utf8")
+	var err error
+	db,err = xorm.NewEngine("mysql",user+":"+password+"@("+host+":"+port+")/"+dbname+"?charset=utf8")
 	if err != nil {
 		panic(err)
 	}

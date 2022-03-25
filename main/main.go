@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/websocket"
@@ -24,15 +23,11 @@ func checkOrigin(r *http.Request) bool {
 	return true
 }
 
-
 func main() {
-	defer func() {
-		if r := recover();r != nil{
-			fmt.Println(r)
-		}
-	}()
-
 	router := gin.Default()
+
+
+
 
 	router.POST("/register",register)
 	//router.POST("/hello",hello)
@@ -49,23 +44,30 @@ func main() {
 	router.Run(":8000")
 }
 
-//func hello(context *gin.Context){
-//	fmt.Println("hello gin")
-//}
+func throw(context *gin.Context){
+	if r := recover();r != nil{
+		context.JSON(500,gin.H{
+			"code":500,
+			"msg":r,
+		})
+	}
+}
+
 
 func register(context *gin.Context) {
 
-	mobile,err := strconv.ParseInt(context.PostForm("mobile"),10,64)
+	defer throw(context)
 
+	mobile,err := strconv.ParseInt(context.PostForm("mobile"),10,64)
 	if err != nil{
 		panic(err)
 	}
-	password := context.Param("password")
-	service.Register(mobile,password,"nickname","avatar",1)
 
+	password := context.Param("password")
+	res := service.Register(mobile,password,"nickname","avatar",1)
 	context.JSON(200,gin.H{
-		"code":200,
-		"success":true,
+		"code":res ,
+		"msg":"注册成功",
 	})
 }
 
