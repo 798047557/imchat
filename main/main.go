@@ -4,10 +4,11 @@ import (
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/websocket"
-	"github/yl/imchat/service"
+	"github/yl/imchat/controller"
 	"net/http"
-	"strconv"
 )
+
+
 
 type ConnUser struct{
 	Conn *websocket.Conn
@@ -26,10 +27,8 @@ func checkOrigin(r *http.Request) bool {
 func main() {
 	router := gin.Default()
 
-
-
-
-	router.POST("/register",register)
+	router.POST("/register",controller.Register)
+	router.POST("/login",controller.Login)
 	//router.POST("/hello",hello)
 	//http.HandleFunc("/register",register)
 
@@ -44,32 +43,10 @@ func main() {
 	router.Run(":8000")
 }
 
-func throw(context *gin.Context){
-	if r := recover();r != nil{
-		context.JSON(500,gin.H{
-			"code":500,
-			"msg":r,
-		})
-	}
-}
 
 
-func register(context *gin.Context) {
 
-	defer throw(context)
 
-	mobile,err := strconv.ParseInt(context.PostForm("mobile"),10,64)
-	if err != nil{
-		panic(err)
-	}
-
-	password := context.Param("password")
-	res := service.Register(mobile,password,"nickname","avatar",1)
-	context.JSON(200,gin.H{
-		"code":res ,
-		"msg":"注册成功",
-	})
-}
 
 
 //func view(){

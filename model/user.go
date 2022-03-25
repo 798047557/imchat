@@ -9,7 +9,7 @@ type User struct{
 	Sex int8 `xorm:" tinyint(1)" json:"sex"`
 	Mobile int64 `xorm:" bigint(20)" json:"mobile"`
 	Password string `xorm:" varchar(20)" json:"password"`
-	Online string `xorm:" tinyint(1)" json:"online"`
+	Online int8 `xorm:" tinyint(1)" json:"online"`
 	CreateTime int64 `xorm:" bigint(20)" json:"create_time"`
 }
 
@@ -20,16 +20,19 @@ func (u *User) CreateInfo() (int64,error){
 }
 
 func (u *User) FindInfoByMobile(mobile int64){
-
 	//fmt.Println(u)
 	_,err := db.Where("mobile = ? ",mobile).Get(u)
-	////fmt.Println(u,bool,error)
+	//fmt.Println(u,bool,error)
 	if err != nil{
 		//log.Fatalln("查询报错")
 		panic(err.Error())
 	}
 }
 
-func UpdateUserByUid(u *User){
-
+func (u *User) UpdateUserByUid(){
+	_,err := db.Where("id = ?",u.Id).Update(u)
+	if err != nil{
+		//log.Fatalln("查询报错")
+		panic(err.Error())
+	}
 }
