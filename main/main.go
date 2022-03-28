@@ -5,24 +5,29 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/websocket"
 	"github/yl/imchat/controller"
-	"net/http"
 )
 
-
+//私聊
+//比如换头像 内存中需要更改 数据库肯定要改
+//加群 长链接
+//获取群列表也是在长链接里面的
+//在不同包里面 全局变量同名是否不共享?
 
 type ConnUser struct{
 	Conn *websocket.Conn
 }
 
-var upgrader = websocket.Upgrader{
-	ReadBufferSize:  1024,
-	WriteBufferSize: 1024,
-	CheckOrigin:     checkOrigin,
-}
+var UserConnMap map[int64]*ConnUser = make(map[int64]*ConnUser)
 
-func checkOrigin(r *http.Request) bool {
-	return true
-}
+//var upgrader = websocket.Upgrader{
+//	ReadBufferSize:  1024,
+//	WriteBufferSize: 1024,
+//	CheckOrigin:     checkOrigin,
+//}
+
+//func checkOrigin(r *http.Request) bool {
+//	return true
+//}
 
 func main() {
 	router := gin.Default()

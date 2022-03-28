@@ -50,3 +50,7 @@ func Login(mobile int64,pwd string) string{
 
 	return token
 }
+
+func checkToken(uid int64,token string) bool {
+	return true
+}

@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github/yl/imchat/service"
 	"strconv"
@@ -27,8 +26,10 @@ func Register(context *gin.Context) {
 		panic(err)
 	}
 
-	password := context.Param("password")
-	fmt.Println(password)
+	password := context.PostForm("password")
+	if password == ""{
+		panic("密码不能为空")
+	}
 	service.Register(mobile,password,"nickname","avatar",1)
 	context.JSON(SUCCESS_CODE,gin.H{
 		"code":SUCCESS_CODE,
