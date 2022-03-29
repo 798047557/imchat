@@ -3,7 +3,6 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/gorilla/websocket"
 	"github/yl/imchat/controller"
 )
 
@@ -13,11 +12,9 @@ import (
 //获取群列表也是在长链接里面的
 //在不同包里面 全局变量同名是否不共享?
 
-type ConnUser struct{
-	Conn *websocket.Conn
-}
 
-var UserConnMap map[int64]*ConnUser = make(map[int64]*ConnUser)
+
+//map 自动扩容
 
 //var upgrader = websocket.Upgrader{
 //	ReadBufferSize:  1024,
