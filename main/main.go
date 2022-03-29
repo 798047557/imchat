@@ -31,6 +31,7 @@ func main() {
 
 	router.POST("/register",controller.Register)
 	router.POST("/login",controller.Login)
+	router.GET("/chat",controller.Chat)
 	//router.POST("/hello",hello)
 	//http.HandleFunc("/register",register)
 

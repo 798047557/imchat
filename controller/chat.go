@@ -18,11 +18,16 @@ type UserNode struct{
 var UserConnMap map[int64]*UserNode = make(map[int64]*UserNode) //uid 和 用户的映射关系
 
 //链接上ws
-func chat(context *gin.Context){
+func Chat(context *gin.Context){
+	defer func() {
+		if r := recover();r != nil{
+			fmt.Println(r)
+		}
+	}()
 	var err error
 	uid,err := strconv.ParseInt(context.Query("id"),10,64)
-	token,_ := context.Get("token")
-
+	token := context.Query("token")
+	//fmt.Println(token)
 	if token != "qwe"{
 		panic("token不对")
 	}
@@ -33,7 +38,9 @@ func chat(context *gin.Context){
 		},
 	}
 
-	userConn := &UserNode{}
+	userConn := &UserNode{
+		Message: make(chan []byte,50), //50句话的容量
+	}
 
 	userConn.Conn,err = webSocket.Upgrade(context.Writer,context.Request,nil)
 	if err != nil{
@@ -45,9 +52,11 @@ func chat(context *gin.Context){
 
 	//从io链接里读取消息 存入数据库 对方是否在线 在线需要存入对方内容里 然后发送给这条消息给对方
 
+	//fmt.Println(userConn)
 	go sendMessage(userConn)
-
+	//
 	go receiveMessage(userConn)
+
 }
 
 //这里是不停从前端接受消息 发送出去
@@ -69,19 +78,18 @@ func sendMessage(node *UserNode)  {
 			panic(err)
 		}
 
+		//fmt.Println(UserConnMap[mesObj.ReceiveUid])
 		if receiveNode,isset := UserConnMap[mesObj.ReceiveUid]; isset{
 			receiveNode.Message <- message
 		}
-		//这里还要把这个消息返回给客户端
 	}
 }
 
 func receiveMessage(node *UserNode)  {
-
 	for {
 		select {
-			case v,_ := <- node.Message :
-				fmt.Println(v)
+			case <- node.Message :
+				node.Conn.WriteMessage(websocket.TextMessage,[]byte("收到了"))
 		}
 	}
 }
