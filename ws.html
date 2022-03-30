@@ -27,7 +27,7 @@
 <input type="text" id="content">
 <input type="button" onclick="send()" value="发送">
 <script>
-    var ws = new WebSocket("ws://127.0.0.1:8000/chat?id=5&token=qwe");
+    var ws = new WebSocket("ws://47.99.125.8/:8000/chat?id=5&token=qwe");
 
     ws.onopen = function(evt) {  //绑定连接事件
         console.log("Connection open ...");
@@ -43,12 +43,13 @@
     //点击按钮的时候发个消息过来
     ws.onmessage = function(evt) {//绑定收到消息事件
         console.log( "Received Message: " + evt.data);
-        $('#container').append('<div class="left">'+evt.data+'</div>')
+        $('#container').append('<div class="left">对方:'+evt.data+'</div>')
     };
 
 
     ws.onclose = function(evt) { //绑定关闭或断开连接事件
         console.log("Connection closed.");
+        alert('链接已断开')
     };
 </script>
 </body>
