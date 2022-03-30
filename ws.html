@@ -3,11 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <style>
+        .left{
+            border: 1px solid;
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+        }
+        .right{
+            border: 1px solid;
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-end;
+        }
+    </style>
+    <script src="./jquery-3.2.1.min.js"></script>
 </head>
 <body>
+<div id="container" style="width: 500px;height:500px;border:solid 1px">
+</div>
+<input type="text" id="content">
 <input type="button" onclick="send()" value="发送">
 <script>
-
     var ws = new WebSocket("ws://127.0.0.1:8000/chat?id=5&token=qwe");
 
     ws.onopen = function(evt) {  //绑定连接事件
@@ -15,13 +34,16 @@
     };
 
     function send(){
-        var str = '{"send_uid":5,"receive_uid":5,"message_type":1,"content":"去你妈的","scope":1}'
+        var value = document.getElementById('content').value
+        var str = '{"send_uid":5,"receive_uid":6,"message_type":1,"content":"'+value+'","scope":1}'
         ws.send(str);
+        $('#container').append('<div class="right">我:'+value+'</div>')
     }
 
     //点击按钮的时候发个消息过来
     ws.onmessage = function(evt) {//绑定收到消息事件
         console.log( "Received Message: " + evt.data);
+        $('#container').append('<div class="left">'+evt.data+'</div>')
     };
 
 
