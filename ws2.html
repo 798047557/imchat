@@ -7,7 +7,6 @@
 <body>
 <input type="button" onclick="send()" value="发送">
 <script>
-
     var ws = new WebSocket("ws://127.0.0.1:8000/chat?id=5&token=qwe");
 
     ws.onopen = function(evt) {  //绑定连接事件
@@ -15,7 +14,7 @@
     };
 
     function send(){
-        var str = '{"send_uid":5,"receive_uid":5,"message_type":1,"content":"去你妈的","scope":1}'
+        var str = '{"send_uid":6,"receive_uid":5,"message_type":1,"content":"去你妈的","scope":1}'
         ws.send(str);
     }
 
@@ -23,7 +22,6 @@
     ws.onmessage = function(evt) {//绑定收到消息事件
         console.log( "Received Message: " + evt.data);
     };
-
 
     ws.onclose = function(evt) { //绑定关闭或断开连接事件
         console.log("Connection closed.");

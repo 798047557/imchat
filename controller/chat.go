@@ -17,6 +17,15 @@ type UserNode struct{
 
 var UserConnMap map[int64]*UserNode = make(map[int64]*UserNode) //uid 和 用户的映射关系
 
+
+type Group struct{
+	//群结构体
+	//用户uid
+	UserIds []int64 //往这个群结构体推送消息
+}
+
+
+
 //链接上ws
 func Chat(context *gin.Context){
 	defer func() {
@@ -57,9 +66,10 @@ func Chat(context *gin.Context){
 	//
 	go receiveMessage(userConn)
 
+
 }
 
-//这里是不停从前端接受消息 发送出去
+//服务器读取ws的消息 入库 往连上ws的用户消息队列里推
 func sendMessage(node *UserNode)  {
 	for {
 		_,message,err := node.Conn.ReadMessage()
@@ -85,6 +95,11 @@ func sendMessage(node *UserNode)  {
 	}
 }
 
+//群聊 要遍历这个群里所有人 然后推送
+
+//互斥锁是相互都不能读写
+//读写锁是共享读 互斥写
+//连上服务器的ws将消息从队列里拿出来 发给ws
 func receiveMessage(node *UserNode)  {
 	for {
 		select {
@@ -93,4 +108,6 @@ func receiveMessage(node *UserNode)  {
 		}
 	}
 }
+
+
 

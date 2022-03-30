@@ -6,25 +6,10 @@ import (
 	"github/yl/imchat/controller"
 )
 
+//实现私聊以及群聊
 //私聊
-//比如换头像 内存中需要更改 数据库肯定要改
-//加群 长链接
-//获取群列表也是在长链接里面的
-//在不同包里面 全局变量同名是否不共享?
+//群聊
 
-
-
-//map 自动扩容
-
-//var upgrader = websocket.Upgrader{
-//	ReadBufferSize:  1024,
-//	WriteBufferSize: 1024,
-//	CheckOrigin:     checkOrigin,
-//}
-
-//func checkOrigin(r *http.Request) bool {
-//	return true
-//}
 
 func main() {
 	router := gin.Default()
@@ -45,6 +30,8 @@ func main() {
 	//如果有token 并且ok 才进入长链接
 	router.Run(":8000")
 }
+
+//两个人同时链接上 如何下发到两个人
 
 
 
@@ -70,8 +57,3 @@ func main() {
 //	}
 //}
 
-
-
-
-
-//写一个 im golang
