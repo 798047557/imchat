@@ -90,7 +90,7 @@ func sendMessage(node *UserNode)  {
 
 		//fmt.Println(UserConnMap[mesObj.ReceiveUid])
 		if receiveNode,isset := UserConnMap[mesObj.ReceiveUid]; isset{
-			receiveNode.Message <- message
+			receiveNode.Message <- []byte(mesObj.Content)
 		}
 	}
 }
@@ -103,8 +103,8 @@ func sendMessage(node *UserNode)  {
 func receiveMessage(node *UserNode)  {
 	for {
 		select {
-			case <- node.Message :
-				node.Conn.WriteMessage(websocket.TextMessage,[]byte("收到了"))
+			case v,_ := <- node.Message :
+				node.Conn.WriteMessage(websocket.TextMessage,v)
 		}
 	}
 }
